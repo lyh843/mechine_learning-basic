@@ -73,6 +73,17 @@ loss = squared_loss
 
 for epoch in range(num_epochs):
     for X, y in data_iter(batch_size, features, labels):
-        l = loss(net(X, w, b), y)
+        l = loss(net(X, w, b), y)   # x 和 y 的小批量损失
+        # 因为l形状是(batch_size, 1)，而不是一个标量。l中的所有元素被加到一起
+        # 并以此计算关于[w,b]的梯度
+        l.sum().backward()
+        sgd([w,b], lr, batch_size) # 使用参数的梯度更新参数
+    with torch.no_grad():
+        train_l = loss(net(features, w, b), labels)
+        print(f'epoch{epoch + 1}, loss {float(train_l.mean()):f}')
+        
+print(f'w的估计误差: {true_w - w.reshape(true_w.shape)}')
+print(f'b的估计误差: {true_b - b}')
+
 
 plt.show()
