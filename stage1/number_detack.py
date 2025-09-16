@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from torch import nn
 
 # 超参数
-batch_size, lr, num_epochs = 256, 0.01, 10
+batch_size, lr, num_epochs = 256, 0.08, 20
 
 # 数据加载
 train_dataset = datasets.MNIST(
@@ -27,9 +27,19 @@ net = nn.Sequential(nn.Flatten(),
                    nn.Linear(num_hidden1, num_hidden2),
                    nn.ReLU(),
                    nn.Linear(num_hidden2, num_output))
+)
+
+num_input, num_hidden1, num_hidden2, num_output = 28 * 28, 16 * 16, 8 * 8, 10
+
+net = nn.Sequential(nn.Flatten(),
+                   nn.Linear(num_input, num_hidden1),
+                   nn.ReLU(),
+                   nn.Linear(num_hidden1, num_hidden2),
+                   nn.ReLU(),
+                   nn.Linear(num_hidden2, num_output))
 
 def init_weight(m):
-    if m == nn.Linear:
+    if isinstance(m, nn.Linear):
         nn.init.normal_(m.weight, std=0.01)
 
 net.apply(init_weight)
@@ -54,4 +64,8 @@ for epoch in range(num_epochs):
     avg_loss = total_loss / len(train_loader)
     
     print(f"epoch = {epoch + 1}, avg_loss = {avg_loss}.")
+    
+# 保存模型权重（供 GUI 加载）
+torch.save(net.state_dict(), "mnist_net.pth")
+print("模型已保存到 mnist_net.pth")
     
