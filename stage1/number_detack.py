@@ -26,7 +26,7 @@ net = nn.Sequential(nn.Flatten(),
                    nn.ReLU(),
                    nn.Linear(num_hidden1, num_hidden2),
                    nn.ReLU(),
-                   nn.Linear(num_hidden2, num_output))
+                   nn.Linear(num_hidden2, num_output)
 )
 
 num_input, num_hidden1, num_hidden2, num_output = 28 * 28, 16 * 16, 8 * 8, 10
