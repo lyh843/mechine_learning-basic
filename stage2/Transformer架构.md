@@ -78,7 +78,7 @@ Q、K、V 分别是输入对参数矩阵$W_q, W_k, W_v$做积得到的。
 **实质**：将原始的输入序列进行多组的自注意力处理；然后再将每一组得到的自注意力结果拼接起来，再通过一个线性层进行处理，得到最终的输出。
 $$
 MultiHead(Q,K,V) = Concat(head_1, \dots, head_h)W^o\\
-where head_i = Attention(QW_i^Q, KW_I^K, VW_i^V)
+where\quad head_i = Attention(QW_i^Q, KW_I^K, VW_i^V)
 $$
 
 ## 三、Encoder-Decoder

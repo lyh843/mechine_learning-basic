@@ -1,7 +1,5 @@
-import d2l
-from d2l import torch
+import torch
 from torch import nn
-from torch import m
 
 # 5.1.1 自定义块
 class MLP(nn.Module):
@@ -35,4 +33,21 @@ class FixedHiddenMLP(nn.Module):
         
     def forward(self, x):
         x = self.linear(x)
-        x = nn.functional.relu(torch.)
+        x = nn.functional.relu(torch.matmul(x, self.rand_weight) + 1)
+        x = self.linear(x)
+        while x.abs().sum() > 1:
+            x /= 2
+        return x.sum()
+    
+class NestMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(nn.Linear(20, 64), nn.ReLU(),
+                                 nn.Linear(64, 32), nn.ReLU())
+        self.linear = nn.linear(32, 16)
+        
+    def forward(self, x):
+        return self.linear(self.net(x))
+    
+chimera = nn.Sequential(NestMLP(), nn.Linear(16, 20), FixedHiddenMLP())
+chimera(x)
